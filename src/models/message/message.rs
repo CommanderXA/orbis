@@ -2,9 +2,9 @@ use chrono::{DateTime, TimeZone, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::crypto::aes::vec_to_string;
+use crate::{crypto::aes::vec_to_string, requests::sides::RequestSides};
 
-use super::{msg_type::MessageType, sides::MessageSides, status::MessageStatus};
+use super::{msg_type::MessageType, status::MessageStatus};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Message<T>
@@ -14,9 +14,9 @@ where
     pub uuid: Uuid,
     pub content: T,
     nonce: String,
-    pub sides: MessageSides,
+    pub sides: RequestSides,
     pub status: MessageStatus,
-    pub tls: Option<i64>,
+    pub ttl: Option<i64>,
     pub secret: bool,
 
     msg_type: MessageType,
@@ -30,9 +30,9 @@ impl<T: MessageContent> Message<T> {
             uuid: Uuid::new_v4(),
             content: content,
             nonce: vec_to_string(nonce),
-            sides: MessageSides::new(sender, receiver),
+            sides: RequestSides::new(sender, receiver),
             status: MessageStatus::new(),
-            tls: None,
+            ttl: None,
             secret: false,
             msg_type: msg_type,
             created_at: Utc::now().timestamp(),

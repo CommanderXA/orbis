@@ -2,8 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::models::command::Command;
 
+pub mod audio_call;
 pub mod auth;
 pub mod message;
+pub mod sides;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Request<T>

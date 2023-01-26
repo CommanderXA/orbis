@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct MessageSides {
+pub struct RequestSides {
     sender: Uuid,
     receiver: Uuid,
 }
 
-impl MessageSides {
+impl RequestSides {
     pub fn new(sender: Uuid, receiver: Uuid) -> Self {
         Self { sender, receiver }
     }
