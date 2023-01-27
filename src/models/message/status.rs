@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
+/// Status of a `Message`
 pub struct MessageStatus {
     sent: bool,
     read: bool,

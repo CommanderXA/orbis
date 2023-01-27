@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use super::{message::MessageContent, msg_type::MessageType};
+use super::{msg_type::MessageType, MessageContent};
 
 #[derive(Debug, Serialize, Deserialize)]
+/// The representation of a File that is a `Message`
 pub struct FileMessage {
     pub text: String,
     pub filename: String,
@@ -10,6 +11,7 @@ pub struct FileMessage {
 }
 
 impl FileMessage {
+    /// Creates new `FileMessage`
     pub fn new(text: &str, filename: &str, file: Vec<u8>) -> Self {
         Self {
             text: text.to_owned(),

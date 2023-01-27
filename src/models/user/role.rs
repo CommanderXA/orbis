@@ -5,6 +5,9 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 
 #[repr(u8)]
 #[derive(Debug, Copy, Clone, PartialEq, Serialize_repr, Deserialize_repr)]
+/// Role of a `User`
+/// 
+/// Can be represented as u8 index
 pub enum Role {
     Admin,
     Moderator,
@@ -12,6 +15,7 @@ pub enum Role {
 }
 
 impl Role {
+    /// Returns u8 index of the `Role` entry
     pub fn get_index(&self) -> u8 {
         serde_json::to_string(self).unwrap().parse::<u8>().unwrap()
     }

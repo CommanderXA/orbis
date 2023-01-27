@@ -1,5 +1,6 @@
 use uuid::Uuid;
 
+/// The representation of the user's session
 pub struct UserSession {
     pub user: Uuid,
     pub jwt: String,

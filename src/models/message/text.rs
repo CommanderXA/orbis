@@ -2,14 +2,16 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
-use super::{message::MessageContent, msg_type::MessageType};
+use super::{msg_type::MessageType, MessageContent};
 
 #[derive(Debug, Serialize, Deserialize)]
+/// Text content of a `Message`
 pub struct TextMessage {
     pub text: String,
 }
 
 impl TextMessage {
+    /// Creates a new `TextMessage`
     pub fn new(text: &str) -> Self {
         Self {
             text: text.to_owned(),
@@ -34,9 +36,7 @@ impl FromStr for TextMessage {
     type Err = NotStringError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let text_message: Self = TextMessage {
-            text: s.to_owned(),
-        };
+        let text_message: Self = TextMessage { text: s.to_owned() };
         match text_message {
             text => Ok(text),
         }

@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+/// General structure that contains 
+/// sender and receiver of content
 pub struct RequestSides {
     sender: Uuid,
     receiver: Uuid,

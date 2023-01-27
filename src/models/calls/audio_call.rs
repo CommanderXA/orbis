@@ -2,34 +2,78 @@ use chrono::{DateTime, TimeZone, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::requests::sides::RequestSides;
+use crate::request::sides::RequestSides;
 
-use super::call_type::CallType;
+use super::{call_type::CallType, CallContent};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+/// The representation of an audio call
 pub struct AudioCall {
     pub uuid: Uuid,
+    pub message: Vec<u8>,
+    pub nonce: Vec<u8>,
     pub sides: RequestSides,
+    pub hashed_jwt_recv: Option<String>,
     pub secret: bool,
+    pub accepted: bool,
 
     created_at: i64,
 }
 
 impl AudioCall {
-    pub fn new(sender: Uuid, receiver: Uuid) -> Self {
+    /// Creates new `AudioCall`
+    pub fn new(
+        sender: Uuid,
+        receiver: Uuid,
+        hashed_jwt_recv: String,
+        message: Vec<u8>,
+        nonce: Vec<u8>,
+        accepted: bool,
+    ) -> Self {
         Self {
             uuid: Uuid::new_v4(),
+            message: message,
+            nonce: nonce,
             sides: RequestSides::new(sender, receiver),
+            hashed_jwt_recv: Some(hashed_jwt_recv),
             secret: false,
+            accepted: accepted,
             created_at: Utc::now().timestamp(),
         }
     }
 
+    /// Returns the Type of the Call
     pub fn get_type(&self) -> CallType {
         CallType::Audio
     }
 
+    /// Returns `timestamp` as `DateTime<Utc>` that 
+    /// specifies the time when this `AudioCall` was created
     pub fn get_created_at(&self) -> DateTime<Utc> {
         Utc.timestamp_opt(self.created_at, 0).unwrap()
+    }
+
+    /// Serializes an instance of `AudioCall` to `bytes`
+    pub fn as_bytes(&self) -> Vec<u8> {
+        bincode::serialize(&self).unwrap()
+    }
+
+    /// Deserializes an instance of `AudioCall` from `bytes`
+    pub fn from_bytes(bytes: Vec<u8>) -> Self {
+        bincode::deserialize(&bytes).unwrap()
+    }
+
+    /// Returns the duration of the call in seconds
+    pub fn duration(&self) -> i64 {
+        match self.accepted {
+            true => self.get_created_at().timestamp() - Utc::now().timestamp(),
+            false => 0,
+        }
+    }
+}
+
+impl CallContent for AudioCall {
+    fn get_type(&self) -> Option<CallType> {
+        Some(CallType::Audio)
     }
 }

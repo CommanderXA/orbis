@@ -1,7 +1,9 @@
 pub mod crypto;
 pub mod errors;
 pub mod models;
-pub mod requests;
+pub mod request;
+pub mod response;
+pub mod utils;
 
 pub use models::message::message::Message;
 

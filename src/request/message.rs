@@ -1,12 +1,13 @@
 use serde::{Deserialize, Serialize};
 
+use crate::models::message::MessageContent;
 use crate::models::message::message::Message;
-use crate::models::message::message::MessageContent;
 
 use super::Command;
 use super::RequestBody;
 
 #[derive(Serialize, Deserialize, Debug)]
+/// Contains a `Message` of a particular type inside
 pub struct MessageRequest<T: MessageContent> {
     pub message: Message<T>,
 }
