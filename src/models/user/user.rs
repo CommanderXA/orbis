@@ -1,7 +1,7 @@
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use x25519_dalek::{EphemeralSecret, PublicKey};
+use x25519_dalek::{PublicKey, StaticSecret};
 
 use crate::utils::{string_to_vec, vec_to_string};
 
@@ -22,20 +22,23 @@ pub struct User {
 
 impl User {
     /// Creates a new `User`
-    pub fn new(username: &str, password: &str, role: Option<Role>) -> Self {
+    pub fn new(username: &str, password: &str, role: Option<Role>) -> (Self, [u8; 32]) {
         // init necessary values
         let user_uuid = Uuid::new_v4();
-        let secret = EphemeralSecret::new(rand_core::OsRng);
+        let secret = StaticSecret::new(rand_core::OsRng);
         let public_key = PublicKey::from(&secret).to_bytes();
 
-        Self {
-            uuid: user_uuid,
-            username: username.to_owned(),
-            password: password.to_owned(),
-            role: role.unwrap_or(Role::User),
-            public_key: vec_to_string(public_key.to_vec()),
-            created_at: Utc::now().timestamp(),
-        }
+        (
+            Self {
+                uuid: user_uuid,
+                username: username.to_owned(),
+                password: password.to_owned(),
+                role: role.unwrap_or(Role::User),
+                public_key: vec_to_string(public_key.to_vec()),
+                created_at: Utc::now().timestamp(),
+            },
+            secret.to_bytes(),
+        )
     }
 
     /// Returns the user's public key as a `Vec<u8>`

@@ -13,7 +13,7 @@ pub struct AudioCall {
     pub message: Vec<u8>,
     pub nonce: Vec<u8>,
     pub sides: RequestSides,
-    pub hashed_jwt_recv: Option<String>,
+    pub receiver_peer: Option<Uuid>,
     pub secret: bool,
     pub accepted: bool,
 
@@ -25,7 +25,7 @@ impl AudioCall {
     pub fn new(
         sender: Uuid,
         receiver: Uuid,
-        hashed_jwt_recv: String,
+        receiver_peer: Uuid,
         message: Vec<u8>,
         nonce: Vec<u8>,
         accepted: bool,
@@ -35,7 +35,7 @@ impl AudioCall {
             message: message,
             nonce: nonce,
             sides: RequestSides::new(sender, receiver),
-            hashed_jwt_recv: Some(hashed_jwt_recv),
+            receiver_peer: Some(receiver_peer),
             secret: false,
             accepted: accepted,
             created_at: Utc::now().timestamp(),
