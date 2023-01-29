@@ -2,7 +2,7 @@ use chrono::{DateTime, TimeZone, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::request::sides::RequestSides;
+use crate::request::sides::{RequestSides, RequestSidesOpt};
 
 use super::{call_type::CallType, CallContent};
 
@@ -13,7 +13,7 @@ pub struct AudioCall {
     pub message: Vec<u8>,
     pub nonce: Vec<u8>,
     pub sides: RequestSides,
-    pub receiver_peer: Option<Uuid>,
+    pub peers: RequestSidesOpt,
     pub secret: bool,
     pub accepted: bool,
 
@@ -25,7 +25,6 @@ impl AudioCall {
     pub fn new(
         sender: Uuid,
         receiver: Uuid,
-        receiver_peer: Uuid,
         message: Vec<u8>,
         nonce: Vec<u8>,
         accepted: bool,
@@ -35,7 +34,7 @@ impl AudioCall {
             message: message,
             nonce: nonce,
             sides: RequestSides::new(sender, receiver),
-            receiver_peer: Some(receiver_peer),
+            peers: RequestSidesOpt::new(),
             secret: false,
             accepted: accepted,
             created_at: Utc::now().timestamp(),
