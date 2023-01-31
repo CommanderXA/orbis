@@ -50,5 +50,6 @@ impl RequestBody for EmptyRequestBody {
 pub enum IndexToken {
     Start,
     Accept,
+    Accepted,
     End,
 }

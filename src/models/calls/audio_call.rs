@@ -46,7 +46,7 @@ impl AudioCall {
         CallType::Audio
     }
 
-    /// Returns `timestamp` as `DateTime<Utc>` that 
+    /// Returns `timestamp` as `DateTime<Utc>` that
     /// specifies the time when this `AudioCall` was created
     pub fn get_created_at(&self) -> DateTime<Utc> {
         Utc.timestamp_opt(self.created_at, 0).unwrap()
@@ -65,7 +65,7 @@ impl AudioCall {
     /// Returns the duration of the call in seconds
     pub fn duration(&self) -> i64 {
         match self.accepted {
-            true => self.get_created_at().timestamp() - Utc::now().timestamp(),
+            true => Utc::now().timestamp() - self.get_created_at().timestamp(),
             false => 0,
         }
     }
